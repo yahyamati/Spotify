@@ -11,7 +11,7 @@ const PlayContextProvider = (props) => {
   const seekBg = useRef(null);
 
   // State
-  const [track, setTrack] = useState(songsData[1]); // Current track
+  const [track, setTrack] = useState(songsData[0]); // Current track
   const [playStatus, setPlayStatus] = useState(false); // Play/pause state
   const [time, setTime] = useState({ 
     currentTime: {
@@ -107,6 +107,7 @@ const PlayContextProvider = (props) => {
   const handleEnded = () => {
     nextTrack();
   };
+  
   const playSong = (id) => {
     setTrack(songsData[id]);
     if (audioRef.current) {

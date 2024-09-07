@@ -5,18 +5,9 @@ import Display from './Components/Display';
 import { PlayContext } from './Context/PlayContext'; 
 
 const App = () => {
-  const { audioRef, handleTimeUpdate } = useContext(PlayContext);
+  const { audioRef } = useContext(PlayContext);
 
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.addEventListener('timeupdate', handleTimeUpdate);
-    }
-    return () => {
-      if (audioRef.current) {
-        audioRef.current.removeEventListener('timeupdate', handleTimeUpdate);
-      }
-    };
-  }, [audioRef, handleTimeUpdate]);
+
 
   return (
     <div className='h-screen bg-black'>
