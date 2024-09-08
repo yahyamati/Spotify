@@ -63,16 +63,23 @@ const PlayContextProvider = (props) => {
    })
   };
 
+  
   const nextTrack = () => {
-    songsData.map(async(item,index)=>{
-      if(track._id===item._id && index<songsData.length){
-         await setTrack(songsData[index+1]);
-         await audioRef.current.play();
-         setPlayStatus(true)
+    songsData.forEach(async (item, index) => {
+      if (track._id === item._id) {
+        if (index < songsData.length - 1) {
+          // Move to the next track
+          await setTrack(songsData[index + 1]);
+        } else {
+          // If it's the last track, move to the first track
+          await setTrack(songsData[0]);
+        }
+        await audioRef.current.play();
+        setPlayStatus(true);
       }
-     })
+    });
   };
-
+  
   // Helper function to format time in minutes and seconds
   const formatTime = (timeInSeconds) => {
     if (!timeInSeconds || isNaN(timeInSeconds)) return { minute: 0, second: 0 }; // Fallback for invalid times
