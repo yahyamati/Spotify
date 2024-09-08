@@ -1,5 +1,5 @@
+import axios from "axios";
 import { createContext, useEffect, useRef, useState } from "react";
-import { songsData } from "../assets/assets";
 
 // Create the context
 export const PlayContext = createContext(null);
@@ -11,7 +11,9 @@ const PlayContextProvider = (props) => {
   const seekBg = useRef(null);
 
   // State
-  const [track, setTrack] = useState(songsData[0]); // Current track
+  const [songsData, setSongsData] = useState([]);
+  const [albumsData, setAlbumsData] = useState([]);
+  const [track, setTrack] = useState(null); // Current track
   const [playStatus, setPlayStatus] = useState(false); // Play/pause state
   const [time, setTime] = useState({ 
     currentTime: {
@@ -40,20 +42,35 @@ const PlayContextProvider = (props) => {
     }
   };
 
-  const playWithId = (id) => {
-    setTrack(songsData[id]);
+  const playWithId = async (id) => {
+    await songsData.map((item)=>{
+      if(item._id === id){
+        setTrack(item);
+      }
+
+    })
+    await audioRef.current.play();
+    setPlayStatus(true);
   };
 
   const prevTrack = () => {
-    const currentIndex = songsData.indexOf(track);
-    const prevIndex = (currentIndex - 1 + songsData.length) % songsData.length;
-    playWithId(prevIndex);
+   songsData.map(async(item,index)=>{
+    if(track._id===item._id && index>0){
+       await setTrack(songsData[index-1]);
+       await audioRef.current.play();
+       setPlayStatus(true)
+    }
+   })
   };
 
   const nextTrack = () => {
-    const currentIndex = songsData.indexOf(track);
-    const nextIndex = (currentIndex + 1) % songsData.length;
-    playWithId(nextIndex);
+    songsData.map(async(item,index)=>{
+      if(track._id===item._id && index<songsData.length){
+         await setTrack(songsData[index+1]);
+         await audioRef.current.play();
+         setPlayStatus(true)
+      }
+     })
   };
 
   // Helper function to format time in minutes and seconds
@@ -63,7 +80,7 @@ const PlayContextProvider = (props) => {
     const seconds = Math.floor(timeInSeconds % 60);
     return { minute: minutes, second: seconds };
   };
-  
+
   // Update time and seek bar
   const handleTimeUpdate = () => {
     if (audioRef.current && seekBar.current && seekBg.current) {
@@ -82,7 +99,7 @@ const PlayContextProvider = (props) => {
       seekBg.current.style.background = `linear-gradient(to right, #ff5722 ${progress}%, #ffffff ${progress}%)`;
     }
   };
-  
+
   // Handle seek (user dragging the seek bar)
   const handleSeek = (e) => {
     if (audioRef.current) {
@@ -107,14 +124,55 @@ const PlayContextProvider = (props) => {
   const handleEnded = () => {
     nextTrack();
   };
+
   
-  const playSong = (id) => {
-    setTrack(songsData[id]);
-    if (audioRef.current) {
-      audioRef.current.play();
-      setPlayStatus(true);
+
+  const getSongData = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/song/list'); // Adjust the URL based on your backend
+      
+      // Check the response structure and access the songs array correctly
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        const songs = response.data.data;
+        setSongsData(songs);
+        // Set the first song if available
+        if (songs.length > 0) {
+          setTrack(songs[0]);
+        } else {
+          // Handle the case where there are no songs
+          console.warn('No songs found in the response.');
+          setTrack(null);
+        }
+      } else {
+        console.error('Unexpected response structure:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching songs:', error);
     }
   };
+  
+  
+
+  const getAlbumData = async () => {
+    try {
+      const response = await axios.get('http://localhost:5000/api/album/list'); // Adjust the URL based on your backend
+      
+      // Check the response structure and handle the data correctly
+      if (response.data && response.data.success && Array.isArray(response.data.data)) {
+        const albums = response.data.data;
+        setAlbumsData(albums);
+      } else {
+        console.error('Unexpected response structure:', response.data);
+      }
+    } catch (error) {
+      console.error('Error fetching albums:', error);
+    }
+  };
+
+  useEffect(() => {
+    getSongData();
+    getAlbumData();
+  }, []);
 
   // Effect to monitor track changes and ensure playing the new track
   useEffect(() => {
@@ -157,7 +215,8 @@ const PlayContextProvider = (props) => {
     handleTimeUpdate,
     nextTrack,
     prevTrack,
-    playSong
+    songsData,
+    albumsData
   };
 
   return (

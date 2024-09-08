@@ -19,7 +19,7 @@ const Player = () => {
     nextTrack
   } = useContext(PlayContext);
 
-  return (
+  return track ?(
     <div className="h-[10%] bg-black flex justify-between items-center text-white px-4">
       {/* Track Info */}
       <div className="hidden lg:!flex items-center gap-4">
@@ -97,7 +97,7 @@ const Player = () => {
         <img className="w-4 cursor-pointer" src={assets.zoom_icon} alt="Zoom Icon" />
       </div>
     </div>
-  );
+  ):null
 };
 
 export default Player;

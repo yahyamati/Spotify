@@ -1,19 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import DisplayHome from './DisplayHome';
 import DisplayAlbum from './DisplayAlbum';
-import { albumsData } from '../assets/assets';
+import { PlayContext } from '../Context/PlayContext';
 
 const Display = () => {
+  const { albumsData } = useContext(PlayContext);
   const displayRef = useRef(null);
   const location = useLocation();
-  
+
   // Extract album ID from URL path
   const isAlbum = location.pathname.includes("album");
-  const albumId = isAlbum ? location.pathname.split('/').pop() : null;
+  const albumId = isAlbum ? location.pathname.split('/').pop() : "";
   
-  // Determine the background color based on album ID
-  const bgcolor = albumId ? albumsData[Number(albumId)]?.bgColor || '#121212' : '#121212';
+  // Find the album
+  const album = isAlbum ? albumsData.find((x) => x._id === albumId) : null;
+  const bgcolor = album ? album.bgColor : "#121212";
 
   useEffect(() => {
     if (displayRef.current) {
@@ -25,10 +27,10 @@ const Display = () => {
     <div ref={displayRef} className='w-[100%] m-2 px-6 pt-4 rounded text-white overflow-auto lg:w-[75%] lg:ml-0'>
       <Routes>
         <Route path="/" element={<DisplayHome />} />
-        <Route path="/album/:id" element={<DisplayAlbum />} />
+        <Route path="/album/:id" element={<DisplayAlbum album={album} />} />
       </Routes>
     </div>
   );
-}
+};
 
 export default Display;
