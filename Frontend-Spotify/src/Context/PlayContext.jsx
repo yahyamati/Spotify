@@ -129,7 +129,7 @@ const PlayContextProvider = (props) => {
 
   const getSongData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/song/list'); // Adjust the URL based on your backend
+      const response = await axios.get('https://spotify-rzt4.onrender.com/api/song/list'); // Adjust the URL based on your backend
       
       // Check the response structure and access the songs array correctly
       if (response.data && response.data.success && Array.isArray(response.data.data)) {
@@ -155,7 +155,7 @@ const PlayContextProvider = (props) => {
 
   const getAlbumData = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/api/album/list'); // Adjust the URL based on your backend
+      const response = await axios.get('https://spotify-rzt4.onrender.com/api/album/list'); // Adjust the URL based on your backend
       
       // Check the response structure and handle the data correctly
       if (response.data && response.data.success && Array.isArray(response.data.data)) {
