@@ -3,10 +3,12 @@ import Navbar from "./Navbar";
 import AlbumItem from "./AlbumItem";
 import SongItem from "./SongItem";
 import { PlayContext } from "../Context/PlayContext";
+import Sidebar from "./Sidebar";
+
 
 const DisplayHome = () => {
-  const { songsData, albumsData } = useContext(PlayContext);
-
+  const { songsData, albumsData,filteredSongsName } = useContext(PlayContext);
+ 
   return (
     <>
       <Navbar />
@@ -33,13 +35,13 @@ const DisplayHome = () => {
         <h1 className="my-5 font-bold text-2xl">Today's biggest hits</h1>
         <div className="flex overflow-auto">
           {songsData && songsData.length > 0 ? (
-            songsData.map((item, index) => (
+            filteredSongsName.map((cat) => (
               <SongItem
-                key={index}
-                name={item.name}
-                desc={item.desc}
-                id={item._id}
-                image={item.image}
+                key={cat.name}
+                name={cat.name}
+                desc={cat.desc}
+                id={cat._id}
+                image={cat.image}
               />
             ))
           ) : (

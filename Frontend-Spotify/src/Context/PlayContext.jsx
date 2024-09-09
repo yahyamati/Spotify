@@ -15,6 +15,8 @@ const PlayContextProvider = (props) => {
   const [albumsData, setAlbumsData] = useState([]);
   const [track, setTrack] = useState(null); // Current track
   const [playStatus, setPlayStatus] = useState(false); // Play/pause state
+  // for search
+  const [searchTerm, setSearchTerm] =useState('');
   const [time, setTime] = useState({ 
     currentTime: {
       second: 0,
@@ -25,6 +27,19 @@ const PlayContextProvider = (props) => {
       minute: 0
     }
   }); // Track time (formatted)
+
+
+//search function
+  const filteredSongsName = songsData.filter((cat) => {
+        
+    if (searchTerm === "") {
+      return cat;
+    } else if (cat.name.toLowerCase().includes(searchTerm.toLowerCase())) {
+      return cat;
+    }
+  });
+
+
 
   // Play the selected track
   const play = () => {
@@ -63,7 +78,7 @@ const PlayContextProvider = (props) => {
    })
   };
 
-  
+
   const nextTrack = () => {
     songsData.forEach(async (item, index) => {
       if (track._id === item._id) {
@@ -136,7 +151,7 @@ const PlayContextProvider = (props) => {
 
   const getSongData = async () => {
     try {
-      const response = await axios.get('https://spotify-rzt4.onrender.com/api/song/list'); // Adjust the URL based on your backend
+      const response = await axios.get('http://localhost:5000/api/song/list'); // Adjust the URL based on your backend
       
       // Check the response structure and access the songs array correctly
       if (response.data && response.data.success && Array.isArray(response.data.data)) {
@@ -162,7 +177,7 @@ const PlayContextProvider = (props) => {
 
   const getAlbumData = async () => {
     try {
-      const response = await axios.get('https://spotify-rzt4.onrender.com/api/album/list'); // Adjust the URL based on your backend
+      const response = await axios.get('http://localhost:5000/api/album/list'); // Adjust the URL based on your backend
       
       // Check the response structure and handle the data correctly
       if (response.data && response.data.success && Array.isArray(response.data.data)) {
@@ -223,7 +238,10 @@ const PlayContextProvider = (props) => {
     nextTrack,
     prevTrack,
     songsData,
-    albumsData
+    albumsData,
+    filteredSongsName,
+    searchTerm,
+    setSearchTerm
   };
 
   return (

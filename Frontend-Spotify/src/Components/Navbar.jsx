@@ -26,9 +26,9 @@ const Navbar = () => {
           <p className="px-4 py-1.5 bg-white text-[15px] text-black rounded-2xl hidden md:!block cursor-pointer">
             Explore Premium
           </p>
-          <p className="px-4 py-1.5 bg-black text-[15px] text-white rounded-2xl cursor-pointer">
+          <a href="https://play.google.com/store/apps/details?id=com.spotify.music&hl=en" target="_blank" className="px-4 py-1.5 bg-black text-[15px] text-white rounded-2xl cursor-pointer">
             Install App
-          </p>
+          </a>
           <p className="rounded-full bg-purple-500 text-black w-7 h-7 flex items-center justify-center text-center">
             Y
           </p>
