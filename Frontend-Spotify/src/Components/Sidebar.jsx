@@ -24,7 +24,7 @@ const Sidebar = () => {
           <img className="w-6" src={assets.search_icon} alt="Search Icon" />
           <input
           placeholder="Search..."
-          className="bg-gray-100 border border-gray-300 rounded-lg py-2 px-4 w-full max-w-xs transition-all focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-gray-700"        
+          className="bg-[#1F1F1F] border border-gray-600 rounded-lg py-2 px-4 w-full max-w-xs transition-all focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-white"        
           name="search"
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)} 
