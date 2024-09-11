@@ -4,6 +4,7 @@ import DisplayHome from './DisplayHome';
 import DisplayAlbum from './DisplayAlbum';
 import { PlayContext } from '../Context/PlayContext';
 import DisplayPlaylist from './DisplayPlaylist';
+import Music from './Music';
 
 const Display = () => {
   const { albumsData } = useContext(PlayContext);
@@ -28,7 +29,8 @@ const Display = () => {
     <div ref={displayRef} className='w-[100%] m-2 px-6 pt-4 rounded text-white overflow-auto lg:w-[75%] lg:ml-0'>
       <Routes>
         <Route path="/" element={<DisplayHome />} />
-        <Route path="/playlist" element={<DisplayPlaylist album={album} />} />
+        <Route path="/playlist" element={<DisplayPlaylist  />} />
+        <Route path="/music" element={<Music  />} />
         <Route path="/album/:id" element={<DisplayAlbum album={album} />} />
       </Routes>
     </div>

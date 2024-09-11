@@ -4,6 +4,7 @@ import Player from './Components/Player';
 import Display from './Components/Display';
 import { PlayContext } from './Context/PlayContext'; 
 
+
 const App = () => {
   const { audioRef } = useContext(PlayContext);
 
