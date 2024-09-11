@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate, useLocation } from "react-router-dom";
+import { PlayContext } from "../Context/PlayContext";
 
 const Navbar = () => {
+  const { searchTerm,setSearchTerm } = useContext(PlayContext);
   const navigate = useNavigate();
   const location = useLocation(); // To get the current location
   const [activeTab, setActiveTab] = useState('');
 
   useEffect(() => {
-    // Update active tab based on the current route
     switch (location.pathname) {
       case '/':
         setActiveTab('all');
@@ -20,13 +21,13 @@ const Navbar = () => {
         setActiveTab('podcasts');
         break;
       default:
-        setActiveTab('all');
+        setActiveTab('');
     }
   }, [location.pathname]);
 
   const handleTabClick = (tabName, route) => {
-    setActiveTab(tabName); // Set clicked tab as active
-    navigate(route); // Navigate to the respective route
+    setActiveTab(tabName); 
+    navigate(route); 
   };
 
   return (
@@ -46,6 +47,16 @@ const Navbar = () => {
             alt="Go Forward"
           />
         </div>
+        <div className="flex items-center gap-3 pl-2 cursor-pointer">
+            <img className="w-6 hidden md:!block" src={assets.search_icon} alt="Search Icon" />
+            <input
+            placeholder="Search..."
+            className="bg-[#1F1F1F] border border-gray-600 rounded-lg py-2 px-4 w-full max-w-xs transition-all focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-white"        
+            name="search"
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)} 
+          />
+        </div>
 
         <div className="flex items-center gap-4">
           <p className="px-4 py-1.5 bg-white text-[15px] text-black rounded-2xl hidden md:!block cursor-pointer">
@@ -54,7 +65,7 @@ const Navbar = () => {
           <a
             href="https://play.google.com/store/apps/details?id=com.spotify.music&hl=en"
             target="_blank"
-            className="px-4 py-1.5 bg-black text-[15px] text-white rounded-2xl cursor-pointer"
+            className="px-4 py-1.5 bg-black text-[15px] text-white rounded-2xl hidden md:!block cursor-pointer"
             rel="noopener noreferrer"
           >
             Install App
