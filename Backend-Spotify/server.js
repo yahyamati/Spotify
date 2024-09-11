@@ -26,6 +26,11 @@ app.use('/api/song',Songroute)
 app.use('/api/album',Albumrouter)
 
 
+// Ping endpoint to keep the backend awake
+app.get('/ping', (req, res) => {
+    res.send('pong');
+  });
+
 
 
 app.get("/",(req,res)=>{
